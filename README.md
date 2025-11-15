@@ -1,4 +1,4 @@
-# fleet-tracker
+# Fleet Tracker
 
 Using (Vuejs 3, Vite, Ts, Unocss )
 
