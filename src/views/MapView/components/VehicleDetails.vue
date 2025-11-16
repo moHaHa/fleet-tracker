@@ -49,7 +49,7 @@ const formatCoordinates = (lat: number, lng: number) => {
 <template>
   <div
     v-if="selectedVehicle"
-    class="fixed top-90px left-10px bg-black h-480px w-300px rounded-12px text-white overflow-hidden flex flex-col border border-gray-700"
+    class="fixed top-90px left-10px bg-black h-[calc(100vh-100px)] w-300px rounded-12px text-white overflow-hidden flex flex-col border border-gray-700"
   >
     <!-- Header -->
     <div class="p-4 border-b border-gray-700 bg-[#111111]">
