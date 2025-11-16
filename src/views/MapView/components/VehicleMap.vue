@@ -129,7 +129,7 @@ watch(vehicles, () => {
 })
 </script>
 <template>
-  <div class="w-full h-full relative">
+  <div class="w-full h-full relative overflow-hidden">
     <div ref="mapContainer" class="w-full h-full text-black"></div>
   </div>
 </template>
