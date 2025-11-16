@@ -37,7 +37,7 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
 
 <template>
   <div
-    class="fixed top-80px right-20px bg-black h-500px w-700px rounded-12px text-white overflow-hidden flex flex-col border border-gray-700"
+    class="fixed top-90px right-10px bg-black h-480px w-700px rounded-12px text-white overflow-hidden flex flex-col border border-gray-700"
   >
     <!-- Header with controls -->
     <div class="p-4 border-b border-gray-700 bg-[#111111]">
