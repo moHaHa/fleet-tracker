@@ -5,7 +5,7 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { storeToRefs } from 'pinia'
-import { useVehiclesStore } from '@/stores/vehicles'
+import { useVehiclesStore, type Vehicle } from '@/stores/vehicles'
 import VehiclesList from './VehiclesList.vue'
 import VehicleDetails from './VehicleDetails.vue'
 
@@ -151,9 +151,9 @@ const handleDrawRoute = (payload: { vehicleId: string }) => {
 
   const routeCoords = vehicle.history.map((e) => [e.lng, e.lat])
 
-  drawRouteOnMap(routeCoords)
+  drawRouteOnMap(routeCoords, vehicle)
 }
-function drawRouteOnMap(lineCoords: number[][]) {
+function drawRouteOnMap(lineCoords: number[][], vehicle: Vehicle) {
   if (!map.value) return
 
   if (map.value.getLayer(ROUTE_LAYER_ID)) {
@@ -183,6 +183,11 @@ function drawRouteOnMap(lineCoords: number[][]) {
       'line-color': '#007aff',
       'line-opacity': 0.9,
     },
+  })
+  map.value?.flyTo({
+    center: [vehicle.location.lng, vehicle.location.lat],
+    zoom: 14,
+    essential: true,
   })
 }
 
