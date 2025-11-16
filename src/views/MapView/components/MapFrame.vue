@@ -165,8 +165,53 @@ const handleOnRowClick = (payload: { vehicle: any }) => {
     }, 2000)
   }
 }
+const ROUTE_SOURCE_ID = 'vehicle-route-source'
+const ROUTE_LAYER_ID = 'vehicle-route-layer'
+const handleDrawRoute = (payload: { vehicleId: string }) => {
+  const vehicle = filteredVehicles.value.find((v) => v.id === payload.vehicleId)
+  if (!vehicle) return
 
+  // Replace this with real vehicle history later
+  const routeCoords = vehicle.history.map((e) => [e.lng, e.lat])
+
+  drawRouteOnMap(routeCoords)
+}
 // const handleDrawRoute = (payload: { vehicleId: string }) => {
+function drawRouteOnMap(lineCoords: number[][]) {
+  if (!map.value) return
+
+  // Remove old route layer/source
+  if (map.value.getLayer(ROUTE_LAYER_ID)) {
+    map.value.removeLayer(ROUTE_LAYER_ID)
+  }
+  if (map.value.getSource(ROUTE_SOURCE_ID)) {
+    map.value.removeSource(ROUTE_SOURCE_ID)
+  }
+
+  // Add fresh source
+  map.value.addSource(ROUTE_SOURCE_ID, {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: lineCoords,
+      },
+    },
+  })
+
+  // Add line layer
+  map.value.addLayer({
+    id: ROUTE_LAYER_ID,
+    type: 'line',
+    source: ROUTE_SOURCE_ID,
+    paint: {
+      'line-width': 4,
+      'line-color': '#007aff',
+      'line-opacity': 0.9,
+    },
+  })
+}
 
 // }
 // -----------------------------
@@ -185,7 +230,7 @@ watch(filteredVehicles, () => {
     <VehiclesList v-if="props.isOpenCarsList" v-on:onRowClick="handleOnRowClick"></VehiclesList>
     <VehicleDetails
       v-if="selectedVehicleId"
-      v-on:onClickViewRoute="console.log('View Route clicked for', $event.vehicleId)"
+      v-on:onClickViewRoute="handleDrawRoute"
     ></VehicleDetails>
   </div>
 </template>
