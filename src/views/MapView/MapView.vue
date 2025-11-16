@@ -18,12 +18,7 @@ const toggleCarsList = () => {
       <div class="border-1px border-white rounded-full px-8px py-8px flex items-center">
         <nav class="flex gap-12px ic">
           <FleetTrackerLogo></FleetTrackerLogo>
-          <div class="relative h-30px">
-            <Input
-              class="bg-transparent outline-none border-white border-solid border-1px h-30px rounded-full ps-34px py-2px text-white placeholder-gray-400 w-200px"
-            ></Input>
-            <div class="i-carbon-search text-white text-16px absolute top-6px left-8px"></div>
-          </div>
+          <div class="relative h-30px"></div>
           <button
             @click="toggleCarsList"
             class="py-4px px-8px rounded-full transition duration-200 select-none font-medium"

@@ -11,7 +11,7 @@ const mapContainer = ref<HTMLElement | null>(null)
 const map = ref<any>(null)
 
 const vehiclesStore = useVehiclesStore()
-const { filteredVehicles: vehicles } = storeToRefs(vehiclesStore)
+const { filteredVehicles } = storeToRefs(vehiclesStore)
 
 const markers = new Map<string, any>()
 const popups = new Map<string, any>()
@@ -61,7 +61,7 @@ function animateMarker(marker: any, from: any, to: any) {
 function updateAllMarkers() {
   if (!map.value) return
 
-  vehicles.value.forEach((v) => {
+  filteredVehicles.value.forEach((v) => {
     const lngLat = [v.location.lng, v.location.lat]
 
     // marker exists -> update
@@ -124,7 +124,7 @@ function updateAllMarkers() {
 // -----------------------------
 // Watch store updates
 // -----------------------------
-watch(vehicles, () => {
+watch(filteredVehicles, () => {
   updateAllMarkers()
 })
 </script>

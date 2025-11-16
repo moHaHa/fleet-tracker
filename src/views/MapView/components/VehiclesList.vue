@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useVehiclesStore } from '@/stores/vehicles'
+import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
@@ -133,7 +134,9 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
             <td class="border-b border-gray-700 p-2">
               {{ vehicle.location.lat.toFixed(4) }},{{ vehicle.location.lng.toFixed(4) }}
             </td>
-            <td class="border-b border-gray-700 p-2">{{ vehicle.lastUpdated }}</td>
+            <td class="border-b border-gray-700 p-2">
+              {{ dayjs(vehicle.lastUpdated).format('H:mm:ss A') }}
+            </td>
           </tr>
           <tr v-if="filteredVehicles.length === 0">
             <td colspan="6" class="border-b border-gray-700 p-4 text-center text-gray-400">
