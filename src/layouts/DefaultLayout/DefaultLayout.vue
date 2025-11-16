@@ -22,7 +22,7 @@ const navLinks = [
       </nav>
     </div>
   </header>
-  <div class="pt-60px">
+  <div class="pt-80px">
     <slot></slot>
   </div>
 </template>

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import DefaultLayout from '@/layouts/DefaultLayout/DefaultLayout.vue'
+import MapFrame from './components/MapFrame.vue'
 </script>
 
 <template>
   <DefaultLayout>
-    <div class="flex justify-center items-center h-[calc(100vh-60px)]">Map View</div>
+    <MapFrame></MapFrame>
   </DefaultLayout>
 </template>
