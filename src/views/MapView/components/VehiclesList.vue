@@ -56,7 +56,7 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
           <label class="block text-12px text-gray-300 mb-1">Status</label>
           <select
             :value="store.statusFilter"
-            @change="handleStatusFilter($event.target.value as any)"
+            @change="handleStatusFilter(($event.target as any)?.value)"
             class="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#44bd87] text-12px bg-[#222222] text-white"
           >
             <option value="all">All Status</option>
@@ -71,7 +71,7 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
           <label class="block text-12px text-gray-300 mb-1">Sort By</label>
           <select
             :value="store.sortBy"
-            @change="handleSort($event.target.value as any)"
+            @change="handleSort(($event.target as any)?.value)"
             class="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#44bd87] text-12px bg-[#222222] text-white"
           >
             <option value="name">Name {{ getSortIndicator('name') }}</option>

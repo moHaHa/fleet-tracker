@@ -2,7 +2,6 @@
 import DefaultLayout from '@/layouts/DefaultLayout/DefaultLayout.vue'
 import MapFrame from './components/MapFrame.vue'
 import FleetTrackerLogo from '@/components/icons/FleetTrackerLogo.vue'
-import VehiclesList from './components/VehiclesList.vue'
 import { ref } from 'vue'
 
 const isOpenCarsList = ref(true)
@@ -34,8 +33,7 @@ const toggleCarsList = () => {
       </div>
     </header>
     <div class="relative">
-      <MapFrame></MapFrame>
-      <VehiclesList v-if="isOpenCarsList"></VehiclesList>
+      <MapFrame :isOpenCarsList="isOpenCarsList"></MapFrame>
     </div>
   </DefaultLayout>
 </template>
