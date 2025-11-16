@@ -12,11 +12,12 @@ export function startSimulation() {
     console.log('Simulating updates for', toUpdate.length, 'vehicles')
     toUpdate.forEach((v) => {
       const z = list.find((e) => e.id === v.id)
+      const newStatus = randomStatus()
       if (z)
         Object.assign(v, {
           speed: randomSpeed(),
-          status: randomStatus(),
-          location: randomNearbyLocation(v.location, 0.04),
+          status: newStatus,
+          location: newStatus == 'online' ? randomNearbyLocation(v.location, 0.04) : v.location,
           lastUpdated: new Date().toISOString(),
         })
     })

@@ -61,21 +61,51 @@ function animateMarker(marker: any, from: any, to: any) {
 function updateAllMarkers() {
   if (!map.value) return
 
+  const currentIds = new Set(filteredVehicles.value.map((v) => v.id))
+
+  // -----------------------------
+  // Remove markers not in filtered list
+  // -----------------------------
+  markers.forEach((marker, id) => {
+    if (!currentIds.has(id)) {
+      marker.remove()
+      markers.delete(id)
+
+      const popup = popups.get(id)
+      if (popup) {
+        popup.remove()
+        popups.delete(id)
+      }
+    }
+  })
+
+  // -----------------------------
+  // Create / Update remaining markers
+  // -----------------------------
   filteredVehicles.value.forEach((v) => {
     const lngLat = [v.location.lng, v.location.lat]
 
-    // marker exists -> update
     if (markers.has(v.id)) {
       const marker = markers.get(v.id)
       const popup = popups.get(v.id)
       const current = marker.getLngLat()
 
+      // -----------------------------
+      // UPDATE MARKER COLOR (FIX)
+      // -----------------------------
+      const el = marker.getElement()
+      el.style.background = {
+        online: '#18c964',
+        offline: '#9ca3af',
+        alert: '#f31260',
+      }[v.status]
+
+      // -----------------------------
+      // ANIMATE POSITION
+      // -----------------------------
       animateMarker(marker, { lat: current.lat, lng: current.lng }, v.location)
 
-      // Update popup position too
-      if (popup) {
-        popup.setLngLat(lngLat as any)
-      }
+      if (popup) popup.setLngLat([v.location.lng, v.location.lat] as any)
       return
     }
 
@@ -87,14 +117,12 @@ function updateAllMarkers() {
     el.style.borderRadius = '50%'
     el.style.cursor = 'pointer'
 
-    // color per status
     el.style.background = {
       online: '#18c964',
       offline: '#9ca3af',
       alert: '#f31260',
     }[v.status]
 
-    // tooltip (popup on hover)
     const popup = new maplibregl.Popup({
       closeButton: false,
       offset: 15,
@@ -107,17 +135,12 @@ function updateAllMarkers() {
     markers.set(v.id, marker)
 
     el.addEventListener('mouseenter', () => {
-      // Always use current marker position
       popup.setLngLat(marker.getLngLat()).addTo(map.value)
     })
 
-    el.addEventListener('mouseleave', () => {
-      popup.remove()
-    })
+    el.addEventListener('mouseleave', () => popup.remove())
 
-    el.addEventListener('click', () => {
-      vehiclesStore.selectVehicle(v.id)
-    })
+    el.addEventListener('click', () => vehiclesStore.selectVehicle(v.id))
   })
 }
 
