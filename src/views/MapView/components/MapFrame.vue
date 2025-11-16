@@ -7,6 +7,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { storeToRefs } from 'pinia'
 import { useVehiclesStore } from '@/stores/vehicles'
 import VehiclesList from './VehiclesList.vue'
+import VehicleDetails from './VehicleDetails.vue'
 
 const props = defineProps<{
   isOpenCarsList: boolean
@@ -15,7 +16,7 @@ const mapContainer = ref<HTMLElement | null>(null)
 const map = ref<any>(null)
 
 const vehiclesStore = useVehiclesStore()
-const { filteredVehicles } = storeToRefs(vehiclesStore)
+const { filteredVehicles, selectedVehicleId } = storeToRefs(vehiclesStore)
 
 const markers = new Map<string, any>()
 const popups = new Map<string, any>()
@@ -165,6 +166,9 @@ const handleOnRowClick = (payload: { vehicle: any }) => {
   }
 }
 
+// const handleDrawRoute = (payload: { vehicleId: string }) => {
+
+// }
 // -----------------------------
 // Watch store updates
 // -----------------------------
@@ -179,6 +183,10 @@ watch(filteredVehicles, () => {
       <div ref="mapContainer" class="w-full h-full text-black"></div>
     </div>
     <VehiclesList v-if="props.isOpenCarsList" v-on:onRowClick="handleOnRowClick"></VehiclesList>
+    <VehicleDetails
+      v-if="selectedVehicleId"
+      v-on:onClickViewRoute="console.log('View Route clicked for', $event.vehicleId)"
+    ></VehicleDetails>
   </div>
 </template>
 
