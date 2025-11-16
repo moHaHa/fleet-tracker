@@ -21,9 +21,6 @@ const { filteredVehicles, selectedVehicleId } = storeToRefs(vehiclesStore)
 const markers = new Map<string, any>()
 const popups = new Map<string, any>()
 
-// -----------------------------
-// Init map
-// -----------------------------
 onMounted(() => {
   map.value = new maplibregl.Map({
     container: mapContainer.value!,
@@ -42,9 +39,6 @@ onUnmounted(() => {
   map.value?.remove()
 })
 
-// -----------------------------
-// Smooth Movement Utility
-// -----------------------------
 function animateMarker(marker: any, from: any, to: any) {
   let progress = 0
   const duration = 1000
@@ -60,17 +54,11 @@ function animateMarker(marker: any, from: any, to: any) {
   requestAnimationFrame(step)
 }
 
-// -----------------------------
-// Create / Update Markers
-// -----------------------------
 function updateAllMarkers() {
   if (!map.value) return
 
   const currentIds = new Set(filteredVehicles.value.map((v) => v.id))
 
-  // -----------------------------
-  // Remove markers not in filtered list
-  // -----------------------------
   markers.forEach((marker, id) => {
     if (!currentIds.has(id)) {
       marker.remove()
@@ -84,9 +72,6 @@ function updateAllMarkers() {
     }
   })
 
-  // -----------------------------
-  // Create / Update remaining markers
-  // -----------------------------
   filteredVehicles.value.forEach((v) => {
     const lngLat = [v.location.lng, v.location.lat]
 
@@ -95,9 +80,6 @@ function updateAllMarkers() {
       const popup = popups.get(v.id)
       const current = marker.getLngLat()
 
-      // -----------------------------
-      // UPDATE MARKER COLOR (FIX)
-      // -----------------------------
       const el = marker.getElement()
       el.style.background = {
         online: '#18c964',
@@ -105,9 +87,6 @@ function updateAllMarkers() {
         alert: '#f31260',
       }[v.status]
 
-      // -----------------------------
-      // ANIMATE POSITION
-      // -----------------------------
       animateMarker(marker, { lat: current.lat, lng: current.lng }, v.location)
 
       if (popup) popup.setLngLat([v.location.lng, v.location.lat] as any)
@@ -159,7 +138,6 @@ const handleOnRowClick = (payload: { vehicle: any }) => {
   const popup = popups.get(vehicle.id)
   if (popup) {
     popup.setLngLat([vehicle.location.lng, vehicle.location.lat]).addTo(map.value)
-    // and delete it after 2 second
     setTimeout(() => {
       popup.remove()
     }, 2000)
@@ -171,16 +149,13 @@ const handleDrawRoute = (payload: { vehicleId: string }) => {
   const vehicle = filteredVehicles.value.find((v) => v.id === payload.vehicleId)
   if (!vehicle) return
 
-  // Replace this with real vehicle history later
   const routeCoords = vehicle.history.map((e) => [e.lng, e.lat])
 
   drawRouteOnMap(routeCoords)
 }
-// const handleDrawRoute = (payload: { vehicleId: string }) => {
 function drawRouteOnMap(lineCoords: number[][]) {
   if (!map.value) return
 
-  // Remove old route layer/source
   if (map.value.getLayer(ROUTE_LAYER_ID)) {
     map.value.removeLayer(ROUTE_LAYER_ID)
   }
@@ -188,7 +163,6 @@ function drawRouteOnMap(lineCoords: number[][]) {
     map.value.removeSource(ROUTE_SOURCE_ID)
   }
 
-  // Add fresh source
   map.value.addSource(ROUTE_SOURCE_ID, {
     type: 'geojson',
     data: {
@@ -200,7 +174,6 @@ function drawRouteOnMap(lineCoords: number[][]) {
     },
   })
 
-  // Add line layer
   map.value.addLayer({
     id: ROUTE_LAYER_ID,
     type: 'line',
@@ -213,10 +186,6 @@ function drawRouteOnMap(lineCoords: number[][]) {
   })
 }
 
-// }
-// -----------------------------
-// Watch store updates
-// -----------------------------
 watch(filteredVehicles, () => {
   updateAllMarkers()
 })
