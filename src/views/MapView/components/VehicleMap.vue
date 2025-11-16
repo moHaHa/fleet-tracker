@@ -11,7 +11,7 @@ const mapContainer = ref<HTMLElement | null>(null)
 const map = ref<any>(null)
 
 const vehiclesStore = useVehiclesStore()
-const { vehicles } = storeToRefs(vehiclesStore)
+const { filteredVehicles: vehicles } = storeToRefs(vehiclesStore)
 
 const markers = new Map<string, any>()
 const popups = new Map<string, any>()
