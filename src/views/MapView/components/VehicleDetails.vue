@@ -51,7 +51,6 @@ const formatCoordinates = (lat: number, lng: number) => {
     v-if="selectedVehicle"
     class="fixed top-90px left-10px bg-black h-[calc(100vh-100px)] w-300px rounded-12px text-white overflow-hidden flex flex-col border border-gray-700"
   >
-    <!-- Header -->
     <div class="p-4 border-b border-gray-700 bg-[#111111]">
       <div class="flex justify-between items-center">
         <h2 class="text-lg font-semibold">Vehicle Details</h2>
@@ -65,9 +64,7 @@ const formatCoordinates = (lat: number, lng: number) => {
       </div>
     </div>
 
-    <!-- Content -->
     <div class="flex-1 overflow-auto p-4 bg-black">
-      <!-- Vehicle Info -->
       <div class="mb-6">
         <h3 class="text-sm font-medium text-gray-300 mb-3">Vehicle Information</h3>
         <div class="space-y-3">
@@ -86,7 +83,6 @@ const formatCoordinates = (lat: number, lng: number) => {
         </div>
       </div>
 
-      <!-- Current Status -->
       <div class="mb-6">
         <h3 class="text-sm font-medium text-gray-300 mb-3">Current Status</h3>
         <div class="space-y-3">
@@ -109,7 +105,6 @@ const formatCoordinates = (lat: number, lng: number) => {
         </div>
       </div>
 
-      <!-- Recent History -->
       <div>
         <h3 class="text-sm font-medium text-gray-300 mb-3">Recent History</h3>
         <div class="space-y-2 max-h-32 overflow-y-auto">
@@ -135,7 +130,6 @@ const formatCoordinates = (lat: number, lng: number) => {
       </div>
     </div>
 
-    <!-- Footer with action buttons -->
     <div class="p-3 border-t border-gray-700 bg-[#111111]">
       <div class="flex justify-between">
         <button
@@ -154,7 +148,6 @@ const formatCoordinates = (lat: number, lng: number) => {
     </div>
   </div>
 
-  <!-- Empty state when no vehicle is selected -->
   <div
     v-else
     class="fixed top-80px left-0px bg-black h-500px w-300px rounded-12px text-white overflow-hidden flex flex-col border border-gray-700 items-center justify-center p-4"
