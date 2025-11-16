@@ -11,10 +11,8 @@ const onRowClick = (vehicle: Vehicle) => {
   emit('onRowClick', { vehicle })
 }
 const store = useVehiclesStore()
-// Use storeToRefs to maintain reactivity for getters
 const { filteredVehicles } = storeToRefs(store)
 
-// Local state for search input
 const localSearchQuery = ref('')
 
 const handleSearch = () => {
@@ -39,9 +37,7 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
   <div
     class="fixed top-90px right-10px bg-black h-480px w-700px rounded-12px text-white overflow-hidden flex flex-col border border-gray-700"
   >
-    <!-- Header with controls -->
     <div class="p-4 border-b border-gray-700 bg-[#111111]">
-      <!-- Search Input -->
       <div class="relative mb-3">
         <input
           v-model="localSearchQuery"
@@ -55,9 +51,7 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
         ></div>
       </div>
 
-      <!-- Filter and Sort Controls -->
       <div class="flex gap-4">
-        <!-- Status Filter -->
         <div class="flex-1">
           <label class="block text-12px text-gray-300 mb-1">Status</label>
           <select
@@ -72,7 +66,6 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
           </select>
         </div>
 
-        <!-- Sort Options -->
         <div class="flex-1">
           <label class="block text-12px text-gray-300 mb-1">Sort By</label>
           <select
@@ -88,7 +81,6 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
       </div>
     </div>
 
-    <!-- Vehicles Table -->
     <div class="flex-1 overflow-auto bg-black">
       <table class="w-full text-12px">
         <thead class="sticky top-0 bg-[#111111]">
