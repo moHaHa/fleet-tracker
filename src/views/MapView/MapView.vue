@@ -26,7 +26,7 @@ const toggleCarsList = () => {
                 : 'bg-[#33333388] text-gray-300 hover:bg-[#404040]',
             ]"
           >
-            Cars List
+            Vehicles List
           </button>
         </nav>
       </div>
