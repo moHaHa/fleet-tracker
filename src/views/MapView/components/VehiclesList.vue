@@ -1,9 +1,15 @@
 <script lang="ts" setup>
-import { useVehiclesStore } from '@/stores/vehicles'
+import { useVehiclesStore, type Vehicle } from '@/stores/vehicles'
 import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+const emit = defineEmits<{
+  onRowClick: [payload: { vehicle: Vehicle }]
+}>()
+const onRowClick = (vehicle: Vehicle) => {
+  emit('onRowClick', { vehicle })
+}
 const store = useVehiclesStore()
 // Use storeToRefs to maintain reactivity for getters
 const { filteredVehicles } = storeToRefs(store)
@@ -115,7 +121,7 @@ const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
             v-for="vehicle in filteredVehicles"
             :key="vehicle.id"
             class="hover:bg-[#111111] cursor-pointer transition-colors"
-            @click="store.selectVehicle(vehicle.id)"
+            @click="onRowClick(vehicle)"
           >
             <td class="border-b border-gray-700 p-2">{{ vehicle.name }}</td>
             <td class="border-b border-gray-700 p-2">{{ vehicle.plate }}</td>

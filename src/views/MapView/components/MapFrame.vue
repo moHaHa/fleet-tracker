@@ -148,6 +148,23 @@ function updateAllMarkers() {
   })
 }
 
+const handleOnRowClick = (payload: { vehicle: any }) => {
+  const vehicle = payload.vehicle
+  map.value?.flyTo({
+    center: [vehicle.location.lng, vehicle.location.lat],
+    zoom: 14,
+    essential: true,
+  })
+  const popup = popups.get(vehicle.id)
+  if (popup) {
+    popup.setLngLat([vehicle.location.lng, vehicle.location.lat]).addTo(map.value)
+    // and delete it after 2 second
+    setTimeout(() => {
+      popup.remove()
+    }, 2000)
+  }
+}
+
 // -----------------------------
 // Watch store updates
 // -----------------------------
@@ -161,7 +178,7 @@ watch(filteredVehicles, () => {
     <div class="w-full h-full relative overflow-hidden">
       <div ref="mapContainer" class="w-full h-full text-black"></div>
     </div>
-    <VehiclesList v-if="props.isOpenCarsList"></VehiclesList>
+    <VehiclesList v-if="props.isOpenCarsList" v-on:onRowClick="handleOnRowClick"></VehiclesList>
   </div>
 </template>
 
