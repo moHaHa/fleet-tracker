@@ -1,38 +1,147 @@
 <script lang="ts" setup>
 import { useVehiclesStore } from '@/stores/vehicles'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
 const store = useVehiclesStore()
-const vehicles = store.vehicles
+// Use storeToRefs to maintain reactivity for getters
+const { filteredVehicles } = storeToRefs(store)
+
+// Local state for search input
+const localSearchQuery = ref('')
+
+const handleSearch = () => {
+  store.setSearchQuery(localSearchQuery.value)
+}
+
+const handleStatusFilter = (status: 'all' | 'online' | 'offline' | 'alert') => {
+  store.setStatusFilter(status)
+}
+
+const handleSort = (sortBy: 'name' | 'plate' | 'lastUpdated') => {
+  store.setSort(sortBy)
+}
+
+const getSortIndicator = (column: 'name' | 'plate' | 'lastUpdated') => {
+  if (store.sortBy !== column) return ''
+  return store.sortOrder === 'asc' ? '↑' : '↓'
+}
 </script>
 
 <template>
-  <div class="fixed top-60px right-50px bg-white h-500px w-600px rounded-12px text-black">
-    <div>
-      <table class="text-12px">
-        <thead>
+  <div
+    class="fixed top-80px right-20px bg-white h-500px w-700px rounded-12px text-black overflow-hidden flex flex-col"
+  >
+    <!-- Header with controls -->
+    <div class="p-4 border-b border-gray-200">
+      <!-- Search Input -->
+      <div class="relative mb-3">
+        <input
+          v-model="localSearchQuery"
+          @input="handleSearch"
+          type="text"
+          placeholder="Search by vehicle name or plate..."
+          class="w-full p-2 pl-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-14px"
+        />
+        <div
+          class="i-carbon-search absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+        ></div>
+      </div>
+
+      <!-- Filter and Sort Controls -->
+      <div class="flex gap-4">
+        <!-- Status Filter -->
+        <div class="flex-1">
+          <label class="block text-12px text-gray-600 mb-1">Status</label>
+          <select
+            :value="store.statusFilter"
+            @change="handleStatusFilter($event.target.value as any)"
+            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-12px"
+          >
+            <option value="all">All Status</option>
+            <option value="online">Online</option>
+            <option value="offline">Offline</option>
+            <option value="alert">Alert</option>
+          </select>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="flex-1">
+          <label class="block text-12px text-gray-600 mb-1">Sort By</label>
+          <select
+            :value="store.sortBy"
+            @change="handleSort($event.target.value as any)"
+            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-12px"
+          >
+            <option value="name">Name {{ getSortIndicator('name') }}</option>
+            <option value="plate">Plate {{ getSortIndicator('plate') }}</option>
+            <option value="lastUpdated">Last Update {{ getSortIndicator('lastUpdated') }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicles Table -->
+    <div class="flex-1 overflow-auto">
+      <table class="w-full text-12px">
+        <thead class="sticky top-0 bg-white">
           <tr>
-            <th class="border-b border-gray-300 p-2 text-left">Vehicle name</th>
-            <th class="border-b border-gray-300 p-2 text-left">Plate number</th>
+            <th
+              class="border-b border-gray-300 p-2 text-left cursor-pointer hover:bg-gray-50"
+              @click="handleSort('name')"
+            >
+              Vehicle name {{ getSortIndicator('name') }}
+            </th>
+            <th
+              class="border-b border-gray-300 p-2 text-left cursor-pointer hover:bg-gray-50"
+              @click="handleSort('plate')"
+            >
+              Plate number {{ getSortIndicator('plate') }}
+            </th>
             <th class="border-b border-gray-300 p-2 text-left">Type</th>
             <th class="border-b border-gray-300 p-2 text-left">Status</th>
             <th class="border-b border-gray-300 p-2 text-left">Last known address</th>
-            <th class="border-b border-gray-300 p-2 text-left">Last updated time</th>
+            <th
+              class="border-b border-gray-300 p-2 text-left cursor-pointer hover:bg-gray-50"
+              @click="handleSort('lastUpdated')"
+            >
+              Last updated time {{ getSortIndicator('lastUpdated') }}
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="vehicle in vehicles" :key="vehicle.id">
+          <tr
+            v-for="vehicle in filteredVehicles"
+            :key="vehicle.id"
+            class="hover:bg-gray-50 cursor-pointer"
+            @click="store.selectVehicle(vehicle.id)"
+          >
             <td class="border-b border-gray-300 p-2">{{ vehicle.name }}</td>
             <td class="border-b border-gray-300 p-2">{{ vehicle.plate }}</td>
             <td class="border-b border-gray-300 p-2">{{ vehicle.type }}</td>
-            <td class="border-b border-gray-300 p-2">{{ vehicle.status }}</td>
+            <td class="border-b border-gray-300 p-2">
+              <span
+                class="inline-block w-2 h-2 rounded-full mr-1"
+                :class="{
+                  'bg-green-500': vehicle.status === 'online',
+                  'bg-red-500': vehicle.status === 'offline',
+                  'bg-yellow-500': vehicle.status === 'alert',
+                }"
+              ></span>
+              {{ vehicle.status }}
+            </td>
             <td class="border-b border-gray-300 p-2">
               {{ vehicle.location.lat.toFixed(4) }},{{ vehicle.location.lng.toFixed(4) }}
             </td>
             <td class="border-b border-gray-300 p-2">{{ vehicle.lastUpdated }}</td>
           </tr>
+          <tr v-if="filteredVehicles.length === 0">
+            <td colspan="6" class="border-b border-gray-300 p-4 text-center text-gray-500">
+              No vehicles found matching your criteria.
+            </td>
+          </tr>
         </tbody>
       </table>
-      <ul></ul>
     </div>
   </div>
 </template>

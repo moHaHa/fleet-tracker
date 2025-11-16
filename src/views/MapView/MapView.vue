@@ -3,8 +3,13 @@ import DefaultLayout from '@/layouts/DefaultLayout/DefaultLayout.vue'
 import MapFrame from './components/MapFrame.vue'
 import FleetTrackerLogo from '@/components/icons/FleetTrackerLogo.vue'
 import VehiclesList from './components/VehiclesList.vue'
+import { ref } from 'vue'
 
-const isOpenCarsList = true
+const isOpenCarsList = ref(true)
+
+const toggleCarsList = () => {
+  isOpenCarsList.value = !isOpenCarsList.value
+}
 </script>
 
 <template>
@@ -20,6 +25,7 @@ const isOpenCarsList = true
             <div class="i-carbon-search text-white text-16px absolute top-6px left-8px"></div>
           </div>
           <button
+            @click="toggleCarsList"
             class="py-4px px-8px rounded-full transition duration-200 select-none font-medium"
             :class="[
               isOpenCarsList
@@ -34,7 +40,7 @@ const isOpenCarsList = true
     </header>
     <div class="relative">
       <MapFrame></MapFrame>
-      <VehiclesList></VehiclesList>
+      <VehiclesList v-if="isOpenCarsList"></VehiclesList>
     </div>
   </DefaultLayout>
 </template>
