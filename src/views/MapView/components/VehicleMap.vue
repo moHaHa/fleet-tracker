@@ -61,16 +61,21 @@ function animateMarker(marker: any, from: any, to: any) {
 function updateAllMarkers() {
   if (!map.value) return
 
-  // alert('update')
-
   vehicles.value.forEach((v) => {
     const lngLat = [v.location.lng, v.location.lat]
 
     // marker exists -> update
     if (markers.has(v.id)) {
       const marker = markers.get(v.id)
+      const popup = popups.get(v.id)
       const current = marker.getLngLat()
+
       animateMarker(marker, { lat: current.lat, lng: current.lng }, v.location)
+
+      // Update popup position too
+      if (popup) {
+        popup.setLngLat(lngLat as any)
+      }
       return
     }
 
@@ -102,7 +107,8 @@ function updateAllMarkers() {
     markers.set(v.id, marker)
 
     el.addEventListener('mouseenter', () => {
-      popup.setLngLat(lngLat as any).addTo(map.value)
+      // Always use current marker position
+      popup.setLngLat(marker.getLngLat()).addTo(map.value)
     })
 
     el.addEventListener('mouseleave', () => {
@@ -124,7 +130,7 @@ watch(vehicles, () => {
 </script>
 <template>
   <div class="w-full h-full relative">
-    <div ref="mapContainer" class="w-full h-full"></div>
+    <div ref="mapContainer" class="w-full h-full text-black"></div>
   </div>
 </template>
 
