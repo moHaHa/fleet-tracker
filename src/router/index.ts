@@ -9,11 +9,6 @@ const router = createRouter({
       name: 'map',
       component: HomeView,
     },
-    {
-      path: '/cars',
-      name: 'cars-list',
-      component: () => import('../views/CarsListView/CarsListView.vue'),
-    },
   ],
 })
 
