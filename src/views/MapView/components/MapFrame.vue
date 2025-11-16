@@ -192,7 +192,7 @@ watch(filteredVehicles, () => {
 </script>
 
 <template>
-  <div class="h-500px bg-black border-1px border-solid border-white">
+  <div class="h-90vh bg-black border-1px border-solid border-white">
     <div class="w-full h-full relative overflow-hidden">
       <div ref="mapContainer" class="w-full h-full text-black"></div>
     </div>

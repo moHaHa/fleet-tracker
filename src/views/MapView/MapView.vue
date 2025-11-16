@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DefaultLayout from '@/layouts/DefaultLayout/DefaultLayout.vue'
 import MapFrame from './components/MapFrame.vue'
 import FleetTrackerLogo from '@/components/icons/FleetTrackerLogo.vue'
 import { ref } from 'vue'
@@ -12,7 +11,7 @@ const toggleCarsList = () => {
 </script>
 
 <template>
-  <DefaultLayout>
+  <div class="pt-80px">
     <header fixed w-full p-4 text-white top-0 left-0 right-0 flex justify-center>
       <div class="border-1px border-white rounded-full px-8px py-8px flex items-center">
         <nav class="flex gap-12px ic">
@@ -35,5 +34,5 @@ const toggleCarsList = () => {
     <div class="relative">
       <MapFrame :isOpenCarsList="isOpenCarsList"></MapFrame>
     </div>
-  </DefaultLayout>
+  </div>
 </template>
